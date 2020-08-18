@@ -1,28 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace BangazonAPI.Models
+﻿namespace BangazonAPI.Models
 {
     public class Products
     {
-        int Id { get; set; }
+        public int Id { get; set; }
 
-        int ProductTypeId { get; set; }
+        public int ProductTypeId { get; set; }
 
         ProductTypes productType { get; set; }
 
-        int Price { get; set; }
+        public int Price { get; set; }
 
-        int Quantity { get; set; }
+        public int Quantity { get; set; }
 
-        int CustomerId { get; set; }
+        public int CustomerId { get; set; }
 
         Customers customer { get; set; }
 
-        string Title { get; set; }
+        public string Title { get; set; }
 
-        string Description { get; set; }
+        public string Description { get; set; }
     }
 }
