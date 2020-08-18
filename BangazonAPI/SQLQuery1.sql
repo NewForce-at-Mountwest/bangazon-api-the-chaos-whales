@@ -23,3 +23,9 @@
 --INSERT INTO Product (ProductTypeId, CustomerId, Price, Title, Description, Quantity) VALUES (3, 4, 20, 'Mug for Muggles', '21th century HP fandom mug', 13)
 
 --SELECT Id, ProductTypeId, CustomerId, Price, Title, Description, Quantity FROM Product
+
+--SELECT Id, ProductTypeId, CustomerId, Price, Title, Description, Quantity
+--                        FROM Product
+--                        WHERE Id = 5
+
+select * from Product
