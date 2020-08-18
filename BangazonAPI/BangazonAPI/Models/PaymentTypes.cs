@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -7,14 +8,12 @@ namespace BangazonAPI.Models
 {
     public class PaymentTypes
     {
-        int Id { get; set; }
+        public int Id { get; set; }
+        public string Name { get; set; }
+        //[Required]
+        public string AccountNumber { get; set; }
 
-        string Name { get; set; }
-
-        int AccountNumber { get; set; }
-
-        int CustomerId { get; set; }
-
-        Customers customer { get; set; }
+        public int CustomerId { get; set; }
+        public Customers customer { get; set; }
     }
 }
