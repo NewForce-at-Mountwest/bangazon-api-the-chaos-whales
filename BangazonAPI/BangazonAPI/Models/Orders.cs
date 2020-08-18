@@ -7,14 +7,18 @@ namespace BangazonAPI.Models
 {
     public class Orders
     {
-        int Id { get; set; }
+        public int Id { get; set; }
 
-        int PaymentTypeId { get; set; }
+        public int PaymentTypeId { get; set; }
 
-        PaymentTypes paymentType { get; set; }
+        public PaymentTypes paymentType { get; set; }
 
-        int CustomerId { get; set; }
+        public List<Products> products { get; set; } = new List<Products>();
 
-        Customers customer { get; set; }
+        public int CustomerId { get; set; }
+
+        public Customers customer { get; set; }
+        public List<Customers> customers { get; set; } = new List<Customers>();
+
     }
 }
