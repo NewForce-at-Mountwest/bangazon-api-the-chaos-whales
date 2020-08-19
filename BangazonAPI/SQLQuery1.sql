@@ -28,4 +28,13 @@
 --                        FROM Product
 --                        WHERE Id = 5
 
-select * from Product
+--select * from Product
+
+                            UPDATE Product
+                            SET ProductTypeId = 4,
+                                    CustomerId = 3,
+                                    Price = 100,
+                                    Title = @Title,
+                                    Description = @Description,
+                                    Quantity = @Quantity
+                                WHERE Id = 8

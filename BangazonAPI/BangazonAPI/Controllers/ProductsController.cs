@@ -111,10 +111,10 @@ namespace ProductsExercisesAPI.Controllers
                 conn.Open();
                 using (SqlCommand cmd = conn.CreateCommand())
                 {
-                    cmd.CommandText = @"INSERT INTO Student (Id, ProductTypeId, CustomerId, Price, Title, Description, Quantity)
+                    cmd.CommandText = @"INSERT INTO Product (ProductTypeId, CustomerId, Price, Title, Description, Quantity)
                                         OUTPUT INSERTED.Id
-                                        VALUES (@Id, @ProductTypeId, @CustomerId, @Price, @Title, @Description, @Quantity)";
-                    cmd.Parameters.Add(new SqlParameter("@Id", product.Id));
+                                        VALUES (@ProductTypeId, @CustomerId, @Price, @Title, @Description, @Quantity)";
+                    //cmd.Parameters.Add(new SqlParameter("@Id", product.Id));
                     cmd.Parameters.Add(new SqlParameter("@ProductTypeId", product.ProductTypeId));
                     cmd.Parameters.Add(new SqlParameter("@CustomerId", product.CustomerId));
                     cmd.Parameters.Add(new SqlParameter("@Price", product.Price));
@@ -145,7 +145,7 @@ namespace ProductsExercisesAPI.Controllers
                                                 Price = @Price,
                                                 Title = @Title,
                                                 Description = @Description,
-                                                Quantity = @Quantity,
+                                                Quantity = @Quantity
                                             WHERE Id = @id";
                         cmd.Parameters.Add(new SqlParameter("@Id", product.Id));
                         cmd.Parameters.Add(new SqlParameter("@ProductTypeId", product.ProductTypeId));
