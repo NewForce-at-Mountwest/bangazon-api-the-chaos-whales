@@ -43,6 +43,10 @@
 
 --SELECT * FROM [Order] LEFT JOIN OrderProduct ON [Order].Id = OrderProduct.OrderId LEFT JOIN Product ON OrderProduct.ProductId = Product.Id;
 
-SELECT [Order].Id, [Order].CustomerId AS BuyerID, [Order].PaymentTypeId, OrderProduct.ProductId, Product.Id AS ProductID, Product.ProductTypeId, Product.CustomerID AS SellerID, Product.Price, Product.Title, Product.Description, Product.Quantity FROM [Order] LEFT JOIN OrderProduct ON[Order].Id = OrderProduct.OrderId LEFT JOIN Product ON OrderProduct.ProductId = Product.Id
+--SELECT [Order].Id, [Order].CustomerId AS BuyerID, [Order].PaymentTypeId, OrderProduct.ProductId, Product.Id AS ProductID, Product.ProductTypeId, Product.CustomerID AS SellerID, Product.Price, Product.Title, Product.Description, Product.Quantity FROM [Order] LEFT JOIN OrderProduct ON[Order].Id = OrderProduct.OrderId LEFT JOIN Product ON OrderProduct.ProductId = Product.Id
 
-SELECT [Order].Id AS OrderID, [Order].CustomerId AS BuyerID, [Order].PaymentTypeId, Customer.Id AS CustomerID, Customer.FirstName, Customer.LastName, Customer.CreationDate, Customer.LastActiveDate FROM [Order] LEFT JOIN Customer ON[Order].CustomerId = Customer.Id;
+--SELECT [Order].Id AS OrderID, [Order].CustomerId AS BuyerID, [Order].PaymentTypeId, Customer.Id AS CustomerID, Customer.FirstName, Customer.LastName, Customer.CreationDate, Customer.LastActiveDate FROM [Order] LEFT JOIN Customer ON[Order].CustomerId = Customer.Id;
+
+--INSERT INTO OrderProduct (OrderId, ProductId) VALUES (9,1)
+
+SELECT * FROM [Order]

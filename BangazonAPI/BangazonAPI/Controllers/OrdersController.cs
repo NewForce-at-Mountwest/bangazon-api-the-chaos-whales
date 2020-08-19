@@ -41,25 +41,26 @@ namespace BangazonAPI.Controllers
                 conn.Open();
                 using (SqlCommand cmd = conn.CreateCommand())
                 {
-                    string query = "SELECT Id AS OrderID, CustomerId AS BuyerID, PaymentTypeId FROM [Order] ";
+                    string query = "SELECT Id AS OrderID, CustomerId AS BuyerID, [Order].PaymentTypeId FROM [Order] ";
 
                     if(completed == "false")
                     {
-                        query += "WHERE PaymentTypeId IS NULL";
+                        query += "WHERE [Order].PaymentTypeId IS NULL";
                     }
-                    else if (completed == "true")
+
+                    if (completed == "true")
                     {
-                        query += "WHERE PaymentTypeId IS NOT NULL";
+                        query += "WHERE [Order].PaymentTypeId IS NOT NULL";
                     }
 
                     if(include == "products")
                     {
-                        query = "SELECT [Order].Id AS OrderID, [Order].CustomerId AS BuyerID, [Order].PaymentTypeId, OrderProduct.ProductId, Product.Id AS ProductID, Product.ProductTypeId, Product.CustomerID AS SellerID, Product.Price, Product.Title, Product.Description, Product.Quantity FROM [Order] LEFT JOIN OrderProduct ON[Order].Id = OrderProduct.OrderId LEFT JOIN Product ON OrderProduct.ProductId = Product.Id ";
+                        query = "SELECT [Order].Id AS OrderID, [Order].CustomerId AS BuyerID, [Order].PaymentTypeId, OrderProduct.ProductId, Product.Id AS ProductID, Product.ProductTypeId, Product.CustomerID AS SellerID, Product.Price, Product.Title, Product.Description, Product.Quantity FROM [Order] LEFT JOIN OrderProduct ON [Order].Id = OrderProduct.OrderId LEFT JOIN Product ON OrderProduct.ProductId = Product.Id ";
                     }
 
-                    if(include == "customers")
+                    if(include == "customer")
                     {
-                        query = "SELECT[Order].Id AS OrderID, [Order].CustomerId AS BuyerID, [Order].PaymentTypeId, Customer.Id AS CustomerID, Customer.FirstName, Customer.LastName, Customer.CreationDate, Customer.LastActiveDate FROM[Order] LEFT JOIN Customer ON[Order].CustomerId = Customer.Id ";
+                        query = "SELECT [Order].Id AS OrderID, [Order].CustomerId AS BuyerID, [Order].PaymentTypeId, Customer.Id AS CustomerID, Customer.FirstName, Customer.LastName, Customer.CreationDate, Customer.LastActiveDate FROM [Order] LEFT JOIN Customer ON [Order].CustomerId = Customer.Id ";
                     }
 
                     cmd.CommandText = query;
@@ -72,10 +73,72 @@ namespace BangazonAPI.Controllers
                         {
                             Id = reader.GetInt32(reader.GetOrdinal("OrderID")),
                             CustomerId = reader.GetInt32(reader.GetOrdinal("BuyerID")),
-                            PaymentTypeId = reader.GetInt32(reader.GetOrdinal("PaymentTypeId")),
                         };
 
-                       orders.Add(order);
+                        if (!reader.IsDBNull(reader.GetOrdinal("PaymentTypeId")))
+                        {
+                            order.PaymentTypeId = reader.GetInt32(reader.GetOrdinal("PaymentTypeId"));
+                        }
+
+                        if(include == "customer")
+                        {
+                            order.customer = new Customers
+                            {
+                                Id = reader.GetInt32(reader.GetOrdinal("CustomerID")),
+                                FirstName = reader.GetString(reader.GetOrdinal("FirstName")),
+                                LastName = reader.GetString(reader.GetOrdinal("LastName")),
+                                AccountCreated = reader.GetDateTime(reader.GetOrdinal("CreationDate")).ToString(),
+                                LastActive = reader.GetDateTime(reader.GetOrdinal("LastActiveDate")).ToString(),
+                            };
+                        }
+
+                        if (orders.Any(o => o.Id == order.Id) == false)
+                        {
+                            if(include == "products")
+                            {
+                                if (!reader.IsDBNull(reader.GetOrdinal("ProductID")))
+                                {
+                                    Products product = new Products
+                                    {
+                                        Id = reader.GetInt32(reader.GetOrdinal("ProductID")),
+                                        ProductTypeId = reader.GetInt32(reader.GetOrdinal("ProductTypeID")),
+                                        Price = (int)reader.GetDecimal(reader.GetOrdinal("Price")),
+                                        Quantity = reader.GetInt32(reader.GetOrdinal("Quantity")),
+                                        CustomerId = reader.GetInt32(reader.GetOrdinal("SellerID")),
+                                        Title = reader.GetString(reader.GetOrdinal("Title")),
+                                        Description = reader.GetString(reader.GetOrdinal("Description")),
+                                    };
+
+                                    order.listOfProducts.Add(product);
+                                }
+                            }
+
+                            orders.Add(order);
+                        }
+
+                        else
+                        {
+                            if (include == "products")
+                            {
+                                if (!reader.IsDBNull(reader.GetOrdinal("ProductID")))
+                                {
+                                    Products product = new Products
+                                    {
+                                        Id = reader.GetInt32(reader.GetOrdinal("ProductID")),
+                                        ProductTypeId = reader.GetInt32(reader.GetOrdinal("ProductTypeID")),
+                                        Price = reader.GetInt32(reader.GetOrdinal("Price")),
+                                        Quantity = reader.GetInt32(reader.GetOrdinal("Quantity")),
+                                        CustomerId = reader.GetInt32(reader.GetOrdinal("SellerID")),
+                                        Title = reader.GetString(reader.GetOrdinal("Title")),
+                                        Description = reader.GetString(reader.GetOrdinal("Description")),
+                                    };
+
+                                    orders.FirstOrDefault(o=> o.Id == order.Id).listOfProducts.Add(product);
+                                }
+                            }
+                        }
+
+                        
                     }
                     reader.Close();
 
@@ -193,7 +256,8 @@ namespace BangazonAPI.Controllers
                     conn.Open();
                     using (SqlCommand cmd = conn.CreateCommand())
                     {
-                        cmd.CommandText = @"DELETE FROM [Order] WHERE Id = @id";
+                        cmd.CommandText = @"DELETE FROM [Order] WHERE Id = @id ";
+                        cmd.CommandText += "DELETE FROM OrderProduct WHERE OrderId = @id";
                         cmd.Parameters.Add(new SqlParameter("@id", id));
 
                         int rowsAffected = cmd.ExecuteNonQuery();
