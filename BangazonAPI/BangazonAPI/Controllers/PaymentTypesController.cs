@@ -105,11 +105,13 @@ namespace BangazonAPI.Controllers
                 conn.Open();
                 using (SqlCommand cmd = conn.CreateCommand())
                 {
-                    cmd.CommandText = @"INSERT INTO PaymentType (AcctNumber, [Name])
+                    cmd.CommandText = @"INSERT INTO PaymentType (AcctNumber, [Name], CustomerId)
                                         OUTPUT INSERTED.Id
-                                        VALUES (@acctNumber, @name)";
+                                        VALUES (@acctNumber, @name, @customerId)";
                     cmd.Parameters.Add(new SqlParameter("@acctNumber", paymentType.AccountNumber));
                     cmd.Parameters.Add(new SqlParameter("@name", paymentType.Name));
+                    cmd.Parameters.Add(new SqlParameter("@customerId", paymentType.CustomerId));
+
 
                     int newId = (int)cmd.ExecuteScalar();
                     paymentType.Id = newId;
@@ -130,10 +132,12 @@ namespace BangazonAPI.Controllers
                     {
                         cmd.CommandText = @"UPDATE PaymentType
                                             SET AcctNumber = @acctNumber,
-                                                [Name] = @name
+                                                [Name] = @name,
+                                                CustomerId= @customerId
                                             WHERE Id = @id";
                         cmd.Parameters.Add(new SqlParameter("@acctNumber", paymentType.AccountNumber));
                         cmd.Parameters.Add(new SqlParameter("@name", paymentType.Name));
+                        cmd.Parameters.Add(new SqlParameter("@customerId", paymentType.CustomerId));
                         cmd.Parameters.Add(new SqlParameter("@id", id));
 
                         int rowsAffected = cmd.ExecuteNonQuery();
