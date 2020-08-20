@@ -30,7 +30,7 @@ namespace BangazonAPI.Controllers
                 return new SqlConnection(_config.GetConnectionString("DefaultConnection"));
             }
         }
-
+        //Get All PaymentType
         [HttpGet]
         public async Task<IActionResult> Get()
         {
@@ -61,7 +61,7 @@ namespace BangazonAPI.Controllers
                 }
             }
         }
-
+        //Get one PaymentType
         [HttpGet("{id}", Name = "GetPaymentType")]
         public async Task<IActionResult> Get([FromRoute] int id)
         {
@@ -96,7 +96,7 @@ namespace BangazonAPI.Controllers
                 }
             }
         }
-
+        //Create new PaymentType
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] PaymentTypes paymentType)
         {
@@ -119,7 +119,7 @@ namespace BangazonAPI.Controllers
                 }
             }
         }
-
+        //Edit PaymentType
         [HttpPut("{id}")]
         public async Task<IActionResult> Put([FromRoute] int id, [FromBody] PaymentTypes paymentType)
         {
@@ -161,7 +161,7 @@ namespace BangazonAPI.Controllers
                 }
             }
         }
-
+        //Delete PaymentType
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete([FromRoute] int id)
         {

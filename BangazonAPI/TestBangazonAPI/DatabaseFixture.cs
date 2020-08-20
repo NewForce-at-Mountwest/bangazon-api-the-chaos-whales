@@ -27,7 +27,7 @@ namespace TestBangazonAPI
                 AccountNumber = "000000",
                 CustomerId = 1
             };
-
+            //Allows to delete function in PaymentTypeTest
             PaymentTypes deleteMe = new PaymentTypes
             {
 
