@@ -46,13 +46,14 @@ namespace TestBangazonAPI
             using (var client = new APIClientProvider().Client)
             {
                 // Arrange
-                PaymentTypes newPaymentType = new PaymentTypes()
+                PaymentTypes newTypeOfPayment = new PaymentTypes()
                 {
-                    Title = "Test PaymentType",
-                    BeanType = "New Bean Type"
+                    Name = "Test PaymentName Type",
+                    AccountNumber = "New AcctNumber Type",
+                    CustomerId = 1
                 };
 
-                string jsonPaymentType = JsonConvert.SerializeObject(newPaymentType);
+                string jsonPaymentType = JsonConvert.SerializeObject(newTypeOfPayment);
 
                 // Act
                 HttpResponseMessage response = await client.PostAsync("/api/paymenttypes",
@@ -62,7 +63,7 @@ namespace TestBangazonAPI
 
                 // Assert
                 Assert.Equal(HttpStatusCode.Created, response.StatusCode);
-                Assert.Equal(paymentTypeResponse.Title, newPaymentType.Title);
+                Assert.Equal(paymentTypeResponse.Name, newTypeOfPayment.Name);
 
             }
         }
@@ -93,8 +94,9 @@ namespace TestBangazonAPI
                 // Arrange
                 PaymentTypes editedPaymentType = new PaymentTypes()
                 {
-                    Title = "EDITED COFFEE",
-                    BeanType = "New Bean Type"
+                    Name = "Test PaymentName Type",
+                    AccountNumber = "New AcctNumber Type",
+                    CustomerId = 1
                 };
 
                 // Act
@@ -116,7 +118,7 @@ namespace TestBangazonAPI
             using (var client = new APIClientProvider().Client)
             {
 
-                HttpResponseMessage response = await client.DeleteAsync($"/api/paymentTypes/{fixture.TestPaymentType.Id}");
+                HttpResponseMessage response = await client.DeleteAsync($"/api/paymentTypes/{fixture.deleteMeTest.Id}");
 
                 Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
 

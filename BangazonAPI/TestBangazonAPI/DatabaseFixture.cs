@@ -16,16 +16,26 @@ namespace TestBangazonAPI
 
 
         public PaymentTypes TestPaymentType { get; set; }
+        public PaymentTypes deleteMeTest { get; set; }
 
         public DatabaseFixture()
         {
 
-                PaymentTypes newCoffee = new PaymentTypes
+            PaymentTypes newPaymentType = new PaymentTypes
             {
-                Title = "Test Coffee",
-                BeanType = "Espresso"
+                Name = "Test Payment",
+                AccountNumber = "000000",
+                CustomerId = 1
             };
 
+            PaymentTypes deleteMe = new PaymentTypes
+            {
+
+                Name = "Test Payment",
+                AccountNumber = "000000",
+                CustomerId = 1
+
+            };
 
 
             using (SqlConnection conn = new SqlConnection(ConnectionString))
@@ -33,19 +43,36 @@ namespace TestBangazonAPI
                 conn.Open();
                 using (SqlCommand cmd = conn.CreateCommand())
                 {
-                    cmd.CommandText = @$"INSERT INTO Coffee (Title, BeanType)
+                    cmd.CommandText = @$"INSERT INTO PaymentType (Name, AcctNumber, CustomerId)
                                         OUTPUT INSERTED.Id
-                                        VALUES ('{newCoffee.Title}', '{newCoffee.BeanType}')";
+                                        VALUES ('{newPaymentType.Name}', '{newPaymentType.AccountNumber}', '{newPaymentType.CustomerId}')";
 
 
                     int newId = (int)cmd.ExecuteScalar();
 
-                    newCoffee.Id = newId;
+                    newPaymentType.Id = newId;
 
-                    TestCoffee = newCoffee;
+                    TestPaymentType = newPaymentType;
                 }
             }
 
+            using (SqlConnection conn = new SqlConnection(ConnectionString))
+            {
+                conn.Open();
+                using (SqlCommand cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @$"INSERT INTO PaymentType (Name, AcctNumber, CustomerId)
+                                        OUTPUT INSERTED.Id
+                                        VALUES ('{deleteMe.Name}', '{deleteMe.AccountNumber}', '{deleteMe.CustomerId}')";
+
+
+                    int newId = (int)cmd.ExecuteScalar();
+
+                    deleteMe.Id = newId;
+
+                    deleteMeTest = deleteMe;
+                }
+            }
         }
 
         public void Dispose()
@@ -55,7 +82,7 @@ namespace TestBangazonAPI
                 conn.Open();
                 using (SqlCommand cmd = conn.CreateCommand())
                 {
-                    cmd.CommandText = @$"DELETE FROM Coffee WHERE Title='Test Coffee'";
+                    cmd.CommandText = @$"DELETE FROM PaymentType WHERE Name='Test Payment' AND Name = 'Test PaymentType Type'";
 
                     cmd.ExecuteNonQuery();
                 }

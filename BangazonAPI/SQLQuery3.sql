@@ -32,5 +32,5 @@
 --INSERT INTO Product (ProductTypeId, CustomerId, Price, Title, Description, Quantity) VALUES (2, 3, 1, 'Gifted Mug', 'Unknown Origin- Pentagram Mug', 666)
 --INSERT INTO Product (ProductTypeId, CustomerId, Price, Title, Description, Quantity) VALUES (3, 4, 20, 'Mug for Muggles', '21th century HP fandom mug', 13)
 
---SELECT * FROM PaymentType;
+SELECT * FROM PaymentType;
 --SELECT * FROM Customer;
