@@ -34,7 +34,7 @@ namespace BangazonAPI.Controllers
 
         // GET: api/<OrdersController>
         [HttpGet]
-        public async Task<IActionResult> Get(string completed, string include)
+        public async Task<IActionResult> Get(string completed, string _include)
         {
             using (SqlConnection conn = Connection)
             {
@@ -53,12 +53,12 @@ namespace BangazonAPI.Controllers
                         query += "WHERE [Order].PaymentTypeId IS NOT NULL";
                     }
 
-                    if(include == "products")
+                    if(_include == "products")
                     {
                         query = "SELECT [Order].Id AS OrderID, [Order].CustomerId AS BuyerID, [Order].PaymentTypeId, OrderProduct.ProductId, Product.Id AS ProductID, Product.ProductTypeId, Product.CustomerID AS SellerID, Product.Price, Product.Title, Product.Description, Product.Quantity FROM [Order] LEFT JOIN OrderProduct ON [Order].Id = OrderProduct.OrderId LEFT JOIN Product ON OrderProduct.ProductId = Product.Id ";
                     }
 
-                    if(include == "customer")
+                    if(_include == "customer")
                     {
                         query = "SELECT [Order].Id AS OrderID, [Order].CustomerId AS BuyerID, [Order].PaymentTypeId, Customer.Id AS CustomerID, Customer.FirstName, Customer.LastName, Customer.CreationDate, Customer.LastActiveDate FROM [Order] LEFT JOIN Customer ON [Order].CustomerId = Customer.Id ";
                     }
@@ -80,7 +80,7 @@ namespace BangazonAPI.Controllers
                             order.PaymentTypeId = reader.GetInt32(reader.GetOrdinal("PaymentTypeId"));
                         }
 
-                        if(include == "customer")
+                        if(_include == "customer")
                         {
                             order.customer = new Customers
                             {
@@ -94,7 +94,7 @@ namespace BangazonAPI.Controllers
 
                         if (orders.Any(o => o.Id == order.Id) == false)
                         {
-                            if(include == "products")
+                            if(_include == "products")
                             {
                                 if (!reader.IsDBNull(reader.GetOrdinal("ProductID")))
                                 {
@@ -118,7 +118,7 @@ namespace BangazonAPI.Controllers
 
                         else
                         {
-                            if (include == "products")
+                            if (_include == "products")
                             {
                                 if (!reader.IsDBNull(reader.GetOrdinal("ProductID")))
                                 {
