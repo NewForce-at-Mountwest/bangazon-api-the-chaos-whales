@@ -49,4 +49,6 @@
 
 --INSERT INTO OrderProduct (OrderId, ProductId) VALUES (9,1)
 
+--SELECT * FROM OrderProduct
+
 SELECT * FROM [Order]

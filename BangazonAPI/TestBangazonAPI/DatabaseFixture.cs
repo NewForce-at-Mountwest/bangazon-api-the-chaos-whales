@@ -55,7 +55,7 @@ namespace TestBangazonAPI
                 conn.Open();
                 using (SqlCommand cmd = conn.CreateCommand())
                 {
-                    cmd.CommandText = @$"DELETE FROM [Order] WHERE CustomerId=4";
+                    cmd.CommandText = @$"DELETE FROM [Order] WHERE CustomerId = 4 AND PaymentTypeId = 1";
                     cmd.ExecuteNonQuery();
                 }
             }
