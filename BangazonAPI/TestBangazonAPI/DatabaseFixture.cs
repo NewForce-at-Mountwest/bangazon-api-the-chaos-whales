@@ -16,14 +16,8 @@ namespace TestBangazonAPI
             Orders completeOrder = new Orders
             {
                 PaymentTypeId = 1,
-                CustomerId = 4
+                CustomerId = 3
             };
-
-            //Orders incompleteOrder = new Orders
-            //{
-            //    PaymentTypeId = 0,
-            //    CustomerId = 3
-            //};
 
             using (SqlConnection conn = new SqlConnection(ConnectionString))
             {
@@ -37,15 +31,6 @@ namespace TestBangazonAPI
                     completeOrder.Id = completeOrderId;
                     TestOrder = completeOrder;
                 }
-                //using (SqlCommand cmd = conn.CreateCommand())
-                //{
-                //    cmd.CommandText = @$"INSERT INTO [Order] (CustomerId, PaymentTypeId)
-                //                        OUTPUT INSERTED.Id
-                //                        VALUES ('{incompleteOrder.CustomerId}', '{incompleteOrder.PaymentTypeId}')";
-                //    int incompleteOrderId = (int)cmd.ExecuteScalar();
-                //    incompleteOrder.Id = incompleteOrderId;
-                //    TestOrder = incompleteOrder;
-                //}
             }
         }
         public void Dispose()
@@ -55,7 +40,7 @@ namespace TestBangazonAPI
                 conn.Open();
                 using (SqlCommand cmd = conn.CreateCommand())
                 {
-                    cmd.CommandText = @$"DELETE FROM [Order] WHERE CustomerId = 4 AND PaymentTypeId = 1";
+                    cmd.CommandText = @$"DELETE FROM [Order] WHERE PaymentTypeId=1";
                     cmd.ExecuteNonQuery();
                 }
             }

@@ -47,7 +47,7 @@ namespace TestBangazonAPI
                 Orders newOrder = new Orders
                 {
                     PaymentTypeId = 1,
-                    CustomerId = 4
+                    CustomerId = 3
                 };
 
                 string jsonOrder = JsonConvert.SerializeObject(newOrder);
@@ -85,8 +85,8 @@ namespace TestBangazonAPI
                 // Arrange
                 Orders editedOrder = new Orders()
                 {
-                    PaymentTypeId = 3,
-                    CustomerId = 4
+                    PaymentTypeId = 1,
+                    CustomerId = 1
                 };
                 // Act
                 string jsonOrder = JsonConvert.SerializeObject(editedOrder);
