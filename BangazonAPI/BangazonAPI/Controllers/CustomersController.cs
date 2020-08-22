@@ -31,7 +31,7 @@ public class CustomersController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IActionResult> Get(string include, string q)
+    public async Task<IActionResult> Get(string _include, string q)
     {
         using (SqlConnection conn = Connection)
         {
@@ -77,7 +77,7 @@ public class CustomersController : ControllerBase
 
                         lastCustomerId = reader.GetInt32(reader.GetOrdinal("Id"));
 
-                       if(include == "payment" && !reader.IsDBNull(reader.GetOrdinal("Payment Id")))
+                       if(_include == "payment" && !reader.IsDBNull(reader.GetOrdinal("Payment Id")))
                         {
                             PaymentTypes paymentType = new PaymentTypes
                             {
@@ -93,7 +93,7 @@ public class CustomersController : ControllerBase
                             });
                         }
 
-                        if (include == "product" && !reader.IsDBNull(reader.GetOrdinal("Product Id")))
+                        if (_include == "product" && !reader.IsDBNull(reader.GetOrdinal("Product Id")))
                         {
                             Products product = new Products
                             {
