@@ -12,6 +12,7 @@ using Xunit;
 
 namespace TestBangazonAPI
 {
+    [Collection("Database collection")]
     public class PaymentTypeTest : IClassFixture<DatabaseFixture>
     {
         DatabaseFixture fixture;
@@ -48,7 +49,7 @@ namespace TestBangazonAPI
                 // Arrange
                 PaymentTypes newTypeOfPayment = new PaymentTypes()
                 {
-                    Name = "Test PaymentName Type",
+                    Name = "Test Payment",
                     AccountNumber = "New AcctNumber Type",
                     CustomerId = 1
                 };
@@ -94,8 +95,8 @@ namespace TestBangazonAPI
                 // Arrange
                 PaymentTypes editedPaymentType = new PaymentTypes()
                 {
-                    Name = "Test PaymentName Type",
-                    AccountNumber = "New AcctNumber Type",
+                    Name = "Test Payment",
+                    AccountNumber = "NEW ACCOUNT",
                     CustomerId = 1
                 };
 
@@ -118,7 +119,7 @@ namespace TestBangazonAPI
             using (var client = new APIClientProvider().Client)
             {
 
-                HttpResponseMessage response = await client.DeleteAsync($"/api/paymentTypes/{fixture.deleteMeTest.Id}");
+                HttpResponseMessage response = await client.DeleteAsync($"/api/paymentTypes/{fixture.TestPaymentType.Id}");
 
                 Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
 

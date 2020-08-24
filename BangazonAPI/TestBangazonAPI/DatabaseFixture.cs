@@ -32,7 +32,7 @@ namespace TestBangazonAPI
             {
 
                 Name = "Test Payment",
-                AccountNumber = "000000",
+                AccountNumber = "000111",
                 CustomerId = 1
 
             };
@@ -82,8 +82,7 @@ namespace TestBangazonAPI
                 conn.Open();
                 using (SqlCommand cmd = conn.CreateCommand())
                 {
-                    cmd.CommandText = @$"DELETE FROM PaymentType WHERE Name = 'Test PaymentName Type'
-                                         DELETE FROM PaymentType WHERE Name = 'Test Payment'";
+                    cmd.CommandText = @$"DELETE FROM PaymentType WHERE Name = 'Test Payment'";
 
                     cmd.ExecuteNonQuery();
                 }
