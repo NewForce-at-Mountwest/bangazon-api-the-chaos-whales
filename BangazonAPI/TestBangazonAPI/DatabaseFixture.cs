@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using BangazonAPI.Models;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
@@ -16,6 +17,8 @@ namespace TestBangazonAPI
 
         public PaymentTypes TestPaymentType { get; set; }
         public PaymentTypes deleteMeTest { get; set; }
+        public Customers TestCustomer { get; set; }
+        
         public Orders TestOrder { get; set; }
 
 
@@ -36,6 +39,12 @@ namespace TestBangazonAPI
                 AccountNumber = "000111",
                 CustomerId = 1
 
+            Customers newCustomer = new Customers
+            {
+                FirstName = "Test Customer",
+                LastName = "CustomerLastName",
+                AccountCreated = "01-01-01",
+                LastActive = "02-02-02"
             };
 
             Orders completeOrder = new Orders
@@ -75,19 +84,27 @@ namespace TestBangazonAPI
                     deleteMeTest = deleteMe;
                 }
 
+                    cmd.CommandText = @$"INSERT INTO Customer (FirstName, LastName, CreationDate, LastActiveDate)
+                                        OUTPUT INSERTED.Id
+                                        VALUES ('{newCustomer.FirstName}', '{newCustomer.LastName}', '{newCustomer.AccountCreated}', '{newCustomer.LastActive}')";
+                    int newId = (int)cmd.ExecuteScalar();
+                    newCustomer.Id = newId;
+                    TestCustomer = newCustomer;
+
+                }
 
                 using (SqlCommand cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = @$"INSERT INTO [Order] (CustomerId, PaymentTypeId)
                                         OUTPUT INSERTED.Id
                                         VALUES ('{completeOrder.CustomerId}', '{completeOrder.PaymentTypeId}')";
-                    int completeOrderId = (int)cmd.ExecuteScalar();
-                    completeOrder.Id = completeOrderId;
-                    TestOrder = completeOrder;
-                }
+                int completeOrderId = (int)cmd.ExecuteScalar();
+                completeOrder.Id = completeOrderId;
+                TestOrder = completeOrder;
             }
         }
 
+        }
         public void Dispose()
         {
             using (SqlConnection conn = new SqlConnection(ConnectionString))
@@ -98,6 +115,9 @@ namespace TestBangazonAPI
                     cmd.CommandText = @$"DELETE FROM PaymentType WHERE [Name] = 'Test Payment'";
 
                     cmd.ExecuteNonQuery();
+                    cmd.CommandText = @$"DELETE FROM Customer WHERE FirstName='Test Customer'";
+                    cmd.ExecuteNonQuery();
+
                 }
                 using (SqlCommand cmd = conn.CreateCommand())
                 {
