@@ -42,12 +42,6 @@ namespace TestBangazonAPI
                     newCustomer.Id = newId;
                     TestCustomer = newCustomer;
 
-                    cmd.CommandText = @$"INSERT INTO [Order] (CustomerId, PaymentTypeId)
-                                        OUTPUT INSERTED.Id
-                                        VALUES ('{completeOrder.CustomerId}', '{completeOrder.PaymentTypeId}')";
-                    int completeOrderId = (int)cmd.ExecuteScalar();
-                    completeOrder.Id = completeOrderId;
-                    TestOrder = completeOrder;
                 }
 
                 using (SqlCommand cmd = conn.CreateCommand())
