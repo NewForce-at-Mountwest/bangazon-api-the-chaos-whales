@@ -62,7 +62,7 @@ namespace TestBangazonAPI
         }
 
         [Fact]
-        public async Task A_Test_One_Product_Type()
+        public async Task Test_One_Product_Type()
         {
             using (var client = new APIClientProvider().Client)
             {
@@ -72,7 +72,7 @@ namespace TestBangazonAPI
                 ProductTypes singleProductType = JsonConvert.DeserializeObject<ProductTypes>(responseBody);
 
                 Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-                Assert.Equal(fixture.TestProductType.Name, singleProductType.Name);
+                Assert.Equal(fixture.TestProductType.Id, singleProductType.Id);
             }
         }
 

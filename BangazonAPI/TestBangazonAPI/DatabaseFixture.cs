@@ -39,11 +39,7 @@ namespace TestBangazonAPI
                     completeOrder.Id = completeOrderId;
                     TestOrder = completeOrder;
                 }
-            }
 
-            using (SqlConnection conn = new SqlConnection(ConnectionString))
-            {
-                conn.Open();
                 using (SqlCommand cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = @$"INSERT INTO ProductType ([Name])
@@ -65,11 +61,7 @@ namespace TestBangazonAPI
                     cmd.CommandText = @$"DELETE FROM [Order] WHERE PaymentTypeId=1";
                     cmd.ExecuteNonQuery();
                 }
-            }
 
-            using (SqlConnection conn = new SqlConnection(ConnectionString))
-            {
-                conn.Open();
                 using (SqlCommand cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = @$"DELETE FROM ProductType WHERE [Name] LIKE '%Wonder Woman%'";
