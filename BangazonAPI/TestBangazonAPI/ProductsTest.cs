@@ -9,7 +9,7 @@ using Xunit;
 
 namespace TestBangazonAPI
 {
-    [Collection("Database collection")]
+    //[Collection("Database collection")]
     public class ProductsTest : IClassFixture<DatabaseFixture>
     {
         DatabaseFixture fixture;
@@ -77,22 +77,21 @@ namespace TestBangazonAPI
             using (var client = new APIClientProvider().Client)
             {
                 // Arrange
-                Products editedProduct = new Products()
+                Products neweditedProduct = new Products()
                 {
-                    ProductTypeId = 1,
-                    CustomerId = 1,
+                    ProductTypeId = 2,
+                    CustomerId = 2,
                     Price = 15,
                     Title = "Edited Test Product",
-                    Description = "The best damn mug you've ever seen",
+                    Description = "The best damn mug youve ever seen",
                     Quantity = 1000
                 };
                 // Act
-                string jsonProduct = JsonConvert.SerializeObject(editedProduct);
+                string jsonProduct = JsonConvert.SerializeObject(neweditedProduct);
                 HttpResponseMessage response = await client.PutAsync($"/api/products/{fixture.TestProduct.Id}",
                     new StringContent(jsonProduct, Encoding.UTF8, "application/json"));
                 // Assert
                 Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
-
             }
         }
         [Fact]
@@ -100,7 +99,7 @@ namespace TestBangazonAPI
         {
             using (var client = new APIClientProvider().Client)
             {
-                HttpResponseMessage response = await client.DeleteAsync($"/api/products/{fixture.TestProduct.Id}");
+                HttpResponseMessage response = await client.DeleteAsync($"/api/products/{fixture.ProductToDelete.Id}");
                 Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
             }
         }
