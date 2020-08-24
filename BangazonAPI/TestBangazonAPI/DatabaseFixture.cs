@@ -50,7 +50,7 @@ namespace TestBangazonAPI
                 conn.Open();
                 using (SqlCommand cmd = conn.CreateCommand())
                 {
-                    cmd.CommandText = @$"INSERT INTO PaymentType (Name, AcctNumber, CustomerId)
+                    cmd.CommandText = @$"INSERT INTO PaymentType ([Name], AcctNumber, CustomerId)
                                         OUTPUT INSERTED.Id
                                         VALUES ('{newPaymentType.Name}', '{newPaymentType.AccountNumber}', {newPaymentType.CustomerId})";
 
@@ -63,7 +63,7 @@ namespace TestBangazonAPI
                 }
                 using (SqlCommand cmd = conn.CreateCommand())
                 {
-                    cmd.CommandText = @$"INSERT INTO PaymentType (Name, AcctNumber, CustomerId)
+                    cmd.CommandText = @$"INSERT INTO PaymentType ([Name], AcctNumber, CustomerId)
                                         OUTPUT INSERTED.Id
                                         VALUES ('{deleteMe.Name}', '{deleteMe.AccountNumber}', {deleteMe.CustomerId})";
 
@@ -95,8 +95,12 @@ namespace TestBangazonAPI
                 conn.Open();
                 using (SqlCommand cmd = conn.CreateCommand())
                 {
-                    cmd.CommandText = @$"DELETE FROM PaymentType WHERE Name = 'Test Payment'";
+                    cmd.CommandText = @$"DELETE FROM PaymentType WHERE [Name] = 'Test Payment'";
 
+                    cmd.ExecuteNonQuery();
+                }
+                using (SqlCommand cmd = conn.CreateCommand())
+                {
                     cmd.CommandText = @$"DELETE FROM [Order] WHERE PaymentTypeId=1";
                     cmd.ExecuteNonQuery();
                 }

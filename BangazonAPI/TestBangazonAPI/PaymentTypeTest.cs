@@ -119,7 +119,7 @@ namespace TestBangazonAPI
             using (var client = new APIClientProvider().Client)
             {
 
-                HttpResponseMessage response = await client.DeleteAsync($"/api/paymentTypes/{fixture.TestPaymentType.Id}");
+                HttpResponseMessage response = await client.DeleteAsync($"/api/paymentTypes/{fixture.deleteMeTest.Id}");
 
                 Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
 
