@@ -57,10 +57,12 @@ public class CustomersController : ControllerBase
                 SqlDataReader reader = cmd.ExecuteReader();
                 List<Customers> customers = new List<Customers>();
 
+                    //An int that holds the ID of the last customer to go through the loop.  It is initialized at -1 because I want it to run at least once.
                 int lastCustomerId = -1;
 
                 while (reader.Read())
                 {
+                        //If the current customer going through the loop isn't the one that originally went through the loop, instantiate the new customer and add it to the customers list.
                         if (reader.GetInt32(reader.GetOrdinal("Id")) != lastCustomerId)
                         {
                             Customers customer = new Customers
@@ -77,7 +79,8 @@ public class CustomersController : ControllerBase
 
                         lastCustomerId = reader.GetInt32(reader.GetOrdinal("Id"));
 
-                       if(_include == "payment" && !reader.IsDBNull(reader.GetOrdinal("Payment Id")))
+                        //If a payment exists and it isn't the last customers payments list, instiate it and add it to the last customer's payments list.
+                       if(_include == "payments" && !reader.IsDBNull(reader.GetOrdinal("Payment Id")))
                         {
                             PaymentTypes paymentType = new PaymentTypes
                             {
@@ -93,7 +96,9 @@ public class CustomersController : ControllerBase
                             });
                         }
 
-                        if (_include == "product" && !reader.IsDBNull(reader.GetOrdinal("Product Id")))
+
+                        //If a product exists and it isn't the last customers products list, instantiate it and add it to the last customer's products list.
+                        if (_include == "products" && !reader.IsDBNull(reader.GetOrdinal("Product Id")))
                         {
                             Products product = new Products
                             {
@@ -108,7 +113,11 @@ public class CustomersController : ControllerBase
 
                             customers.Where(customer => customer.Id == lastCustomerId).ToList().ForEach(customer =>
                             {
-                                customer.listOfProducts.Add(product);
+                                if (!customer.listOfProducts.Any(product => product.Id == reader.GetInt32(reader.GetOrdinal("ProductTypeId"))))
+                                {
+                                    customer.listOfProducts.Add(product);
+                                }
+                                
                             });
                         }
 
