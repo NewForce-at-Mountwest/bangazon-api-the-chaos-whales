@@ -34,3 +34,7 @@
 
 SELECT * FROM PaymentType;
 --SELECT * FROM Customer;
+--DELETE FROM PaymentType WHERE Name='Test Payment';
+--DELETE FROM PaymentType WHERE Name = 'Test PaymentName Type';
+
+--INSERT INTO PaymentType (Name, AcctNumber, CustomerId)  VALUES ('{newPaymentType.Name}', '{newPaymentType.AccountNumber}', 1)
