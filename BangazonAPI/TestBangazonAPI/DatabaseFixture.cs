@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Text;
+using BangazonAPI.Models;
 
 namespace TestBangazonAPI
 {
@@ -20,6 +21,15 @@ namespace TestBangazonAPI
                 AccountCreated = "01-01-01",
                 LastActive = "02-02-02"
             };
+        public Orders TestOrder { get; set; }
+        public DatabaseFixture()
+        {
+            Orders completeOrder = new Orders
+            {
+                PaymentTypeId = 1,
+                CustomerId = 3
+            };
+
             using (SqlConnection conn = new SqlConnection(ConnectionString))
             {
                 conn.Open();
@@ -31,6 +41,12 @@ namespace TestBangazonAPI
                     int newId = (int)cmd.ExecuteScalar();
                     newCustomer.Id = newId;
                     TestCustomer = newCustomer;
+                    cmd.CommandText = @$"INSERT INTO [Order] (CustomerId, PaymentTypeId)
+                                        OUTPUT INSERTED.Id
+                                        VALUES ('{completeOrder.CustomerId}', '{completeOrder.PaymentTypeId}')";
+                    int completeOrderId = (int)cmd.ExecuteScalar();
+                    completeOrder.Id = completeOrderId;
+                    TestOrder = completeOrder;
                 }
             }
         }
@@ -42,6 +58,7 @@ namespace TestBangazonAPI
                 using (SqlCommand cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = @$"DELETE FROM Customer WHERE FirstName='Test Customer'";
+                    cmd.CommandText = @$"DELETE FROM [Order] WHERE PaymentTypeId=1";
                     cmd.ExecuteNonQuery();
                 }
             }
