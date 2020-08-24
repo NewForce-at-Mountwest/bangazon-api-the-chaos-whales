@@ -16,6 +16,8 @@ namespace TestBangazonAPI
 
         public PaymentTypes TestPaymentType { get; set; }
         public PaymentTypes deleteMeTest { get; set; }
+        public Orders TestOrder { get; set; }
+
 
         public DatabaseFixture()
         {
@@ -36,6 +38,12 @@ namespace TestBangazonAPI
 
             };
 
+            Orders completeOrder = new Orders
+            {
+                PaymentTypeId = 1,
+                CustomerId = 3
+            };
+
 
             using (SqlConnection conn = new SqlConnection(ConnectionString))
             {
@@ -53,21 +61,6 @@ namespace TestBangazonAPI
 
                     TestPaymentType = newPaymentType;
                 }
-            }
-
-        private readonly string ConnectionString = @$"Server=localhost\SQLEXPRESS;Database=BangazonAPI;Trusted_Connection=True;";
-        public Orders TestOrder { get; set; }
-        public DatabaseFixture()
-        {
-            Orders completeOrder = new Orders
-            {
-                PaymentTypeId = 1,
-                CustomerId = 3
-            };
-
-            using (SqlConnection conn = new SqlConnection(ConnectionString))
-            {
-                conn.Open();
                 using (SqlCommand cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = @$"INSERT INTO PaymentType (Name, AcctNumber, CustomerId)
@@ -81,9 +74,10 @@ namespace TestBangazonAPI
 
                     deleteMeTest = deleteMe;
                 }
-            }
-        }
 
+
+                using (SqlCommand cmd = conn.CreateCommand())
+                {
                     cmd.CommandText = @$"INSERT INTO [Order] (CustomerId, PaymentTypeId)
                                         OUTPUT INSERTED.Id
                                         VALUES ('{completeOrder.CustomerId}', '{completeOrder.PaymentTypeId}')";
@@ -93,6 +87,7 @@ namespace TestBangazonAPI
                 }
             }
         }
+
         public void Dispose()
         {
             using (SqlConnection conn = new SqlConnection(ConnectionString))
@@ -111,3 +106,4 @@ namespace TestBangazonAPI
 
     }
 }
+

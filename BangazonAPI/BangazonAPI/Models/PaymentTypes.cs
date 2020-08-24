@@ -13,17 +13,7 @@ namespace BangazonAPI.Models
         //[Required]
         public string AccountNumber { get; set; }
 
-<<<<<<< HEAD
         public int CustomerId { get; set; }
         public Customers customer { get; set; }
-=======
-        string Name { get; set; }
-
-        string AccountNumber { get; set; }
-
-        int CustomerId { get; set; }
-
-        Customers customer { get; set; }
->>>>>>> master
     }
 }
