@@ -113,7 +113,7 @@ public class CustomersController : ControllerBase
 
                             customers.Where(customer => customer.Id == lastCustomerId).ToList().ForEach(customer =>
                             {
-                                if (!customer.listOfProducts.Any(product => product.Id == reader.GetInt32(reader.GetOrdinal("ProductTypeId"))))
+                                if (!customer.listOfProducts.Any(newProduct => newProduct.Id == reader.GetInt32(reader.GetOrdinal("ProductTypeId"))))
                                 {
                                     customer.listOfProducts.Add(product);
                                 }
