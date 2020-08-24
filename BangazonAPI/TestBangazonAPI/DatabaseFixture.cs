@@ -12,6 +12,8 @@ namespace TestBangazonAPI
     {
         private readonly string ConnectionString = @$"Server=localhost\SQLEXPRESS;Database=BangazonAPI;Trusted_Connection=True;";
         public Customers TestCustomer { get; set; }
+        
+        public Orders TestOrder { get; set; }
         public DatabaseFixture()
         {
             Customers newCustomer = new Customers
@@ -21,9 +23,7 @@ namespace TestBangazonAPI
                 AccountCreated = "01-01-01",
                 LastActive = "02-02-02"
             };
-        public Orders TestOrder { get; set; }
-        public DatabaseFixture()
-        {
+
             Orders completeOrder = new Orders
             {
                 PaymentTypeId = 1,
@@ -41,6 +41,7 @@ namespace TestBangazonAPI
                     int newId = (int)cmd.ExecuteScalar();
                     newCustomer.Id = newId;
                     TestCustomer = newCustomer;
+
                     cmd.CommandText = @$"INSERT INTO [Order] (CustomerId, PaymentTypeId)
                                         OUTPUT INSERTED.Id
                                         VALUES ('{completeOrder.CustomerId}', '{completeOrder.PaymentTypeId}')";
@@ -48,7 +49,17 @@ namespace TestBangazonAPI
                     completeOrder.Id = completeOrderId;
                     TestOrder = completeOrder;
                 }
+
+                using (SqlCommand cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @$"INSERT INTO [Order] (CustomerId, PaymentTypeId)
+                                        OUTPUT INSERTED.Id
+                                        VALUES ('{completeOrder.CustomerId}', '{completeOrder.PaymentTypeId}')";
+                int completeOrderId = (int)cmd.ExecuteScalar();
+                completeOrder.Id = completeOrderId;
+                TestOrder = completeOrder;
             }
+        }
         }
         public void Dispose()
         {
@@ -58,6 +69,11 @@ namespace TestBangazonAPI
                 using (SqlCommand cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = @$"DELETE FROM Customer WHERE FirstName='Test Customer'";
+                    cmd.ExecuteNonQuery();
+
+                }
+                using (SqlCommand cmd = conn.CreateCommand())
+                {
                     cmd.CommandText = @$"DELETE FROM [Order] WHERE PaymentTypeId=1";
                     cmd.ExecuteNonQuery();
                 }
