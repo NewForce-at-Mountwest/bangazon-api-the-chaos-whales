@@ -15,7 +15,7 @@ namespace TestBangazonAPI
             {
                 ProductTypeId = 1,
                 CustomerId = 1,
-                Price = 15,
+                Price = 15.00m,
                 Title = "Test Product",
                 Description = "The best damn mug youve ever seen",
                 Quantity = 1000
@@ -53,11 +53,10 @@ namespace TestBangazonAPI
                                                 '{newProduct.Description}',
                                                 '{newProduct.Quantity}')";
                     int newerId = (int)cmd.ExecuteScalar();
-                    newerpr = newProduct;
+                    //newerpr = newProduct;
                     newerpr.Id = newerId;
-                    newProduct.Title = "hello";
                     ProductToDelete = newerpr;
-                    ;
+
                 }
             }
         }

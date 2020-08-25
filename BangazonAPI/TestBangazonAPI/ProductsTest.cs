@@ -9,7 +9,7 @@ using Xunit;
 
 namespace TestBangazonAPI
 {
-    //[Collection("Database collection")]
+    [Collection("Database collection")]
     public class ProductsTest : IClassFixture<DatabaseFixture>
     {
         DatabaseFixture fixture;
@@ -42,7 +42,7 @@ namespace TestBangazonAPI
                 {
                     ProductTypeId = 1,
                     CustomerId = 1,
-                    Price = 15,
+                    Price = 15.00m,
                     Title = "Test Product",
                     Description = "The best damn mug you've ever seen",
                     Quantity = 1000
@@ -79,9 +79,9 @@ namespace TestBangazonAPI
                 // Arrange
                 Products neweditedProduct = new Products()
                 {
-                    ProductTypeId = 2,
-                    CustomerId = 2,
-                    Price = 15,
+                    ProductTypeId = 1,
+                    CustomerId = 1,
+                    Price = 15.00m,
                     Title = "Edited Test Product",
                     Description = "The best damn mug youve ever seen",
                     Quantity = 1000
