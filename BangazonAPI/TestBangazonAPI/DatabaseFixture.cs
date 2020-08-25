@@ -1,9 +1,6 @@
 ﻿using BangazonAPI.Models;
-using Microsoft.Extensions.Configuration;
 using System;
 using System.Data.SqlClient;
-using System.Text;
-using BangazonAPI.Models;
 
 namespace TestBangazonAPI
 {
@@ -88,15 +85,15 @@ namespace TestBangazonAPI
                     newCustomer.Id = newId;
                     TestCustomer = newCustomer;
                 }
-            
+
                 using (SqlCommand cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = @$"INSERT INTO [Order] (CustomerId, PaymentTypeId)
                                         OUTPUT INSERTED.Id
                                         VALUES ('{completeOrder.CustomerId}', '{completeOrder.PaymentTypeId}')";
-                int completeOrderId = (int)cmd.ExecuteScalar();
-                completeOrder.Id = completeOrderId;
-                TestOrder = completeOrder;
+                    int completeOrderId = (int)cmd.ExecuteScalar();
+                    completeOrder.Id = completeOrderId;
+                    TestOrder = completeOrder;
                 }
             }
         }
@@ -123,11 +120,10 @@ namespace TestBangazonAPI
                     cmd.CommandText = @$"DELETE FROM [Order] WHERE PaymentTypeId=1";
                     cmd.ExecuteNonQuery();
                 }
-                
-                    
 
-                }
+
+
             }
         }
     }
-
+}
