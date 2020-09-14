@@ -1,10 +1,6 @@
 ﻿using BangazonAPI.Models;
-using Microsoft.Extensions.Configuration;
 using System;
-using System.Collections.Generic;
 using System.Data.SqlClient;
-using System.Text;
-
 
 namespace TestBangazonAPI
 {
@@ -18,7 +14,8 @@ namespace TestBangazonAPI
         public PaymentTypes TestPaymentType { get; set; }
         public PaymentTypes deleteMeTest { get; set; }
         public Customers TestCustomer { get; set; }
-
+        public Products TestProduct { get; set; }
+        public Products ProductToDelete { get; set; }
         public Orders TestOrder { get; set; }
 
         public ProductTypes TestProductType { get; set; }
@@ -55,6 +52,16 @@ namespace TestBangazonAPI
                 CustomerId = 3
             };
 
+            Products newProduct = new Products
+            {
+                ProductTypeId = 1,
+                CustomerId = 1,
+                Price = 15.00m,
+                Title = "Test Product",
+                Description = "The best damn mug youve ever seen",
+                Quantity = 1000
+            };
+            Products newerpr = new Products();
             ProductTypes newProductType = new ProductTypes
             {
                 Name = "Test Wonder Woman Mug"
@@ -65,22 +72,54 @@ namespace TestBangazonAPI
                 conn.Open();
                 using (SqlCommand cmd = conn.CreateCommand())
                 {
-                    cmd.CommandText = @$"INSERT INTO PaymentType ([Name], AcctNumber, CustomerId)
+                    cmd.CommandText = @$"INSERT INTO Product (ProductTypeId, CustomerId, Price, Title, Description, Quantity)
                                         OUTPUT INSERTED.Id
-                                        VALUES ('{newPaymentType.Name}', '{newPaymentType.AccountNumber}', {newPaymentType.CustomerId})";
-
-
+                                        VALUES ('{newProduct.ProductTypeId}', 
+                                                '{newProduct.CustomerId}',
+                                                '{newProduct.Price}',
+                                                '{newProduct.Title}',
+                                                '{newProduct.Description}',
+                                                '{newProduct.Quantity}')";
                     int newId = (int)cmd.ExecuteScalar();
+                    newProduct.Id = (newId);
+                    TestProduct = newProduct;
 
-                    newPaymentType.Id = newId;
-
-                    TestPaymentType = newPaymentType;
                 }
+
+
+                using (SqlCommand cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @$"INSERT INTO Product (ProductTypeId, CustomerId, Price, Title, Description, Quantity)
+                                        OUTPUT INSERTED.Id
+                                        VALUES ('{newProduct.ProductTypeId}', 
+                                                '{newProduct.CustomerId}',
+                                                '{newProduct.Price}',
+                                                '{newProduct.Title}',
+                                                '{newProduct.Description}',
+                                                '{newProduct.Quantity}')";
+                    int newerId = (int)cmd.ExecuteScalar();
+                    //newerpr = newProduct;
+                    newerpr.Id = newerId;
+                    ProductToDelete = newerpr;
+                }
+
+                using (SqlCommand cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @$"INSERT INTO PaymentType([Name], AcctNumber, CustomerId)
+                                        OUTPUT INSERTED.Id
+                                        VALUES('{newPaymentType.Name}', '{newPaymentType.AccountNumber}', { newPaymentType.CustomerId})";
+                    int newId = (int)cmd.ExecuteScalar();
+                    newPaymentType.Id = newId;
+                    TestPaymentType = newPaymentType;
+
+                }
+
                 using (SqlCommand cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = @$"INSERT INTO PaymentType ([Name], AcctNumber, CustomerId)
-                                        OUTPUT INSERTED.Id
-                                        VALUES ('{deleteMe.Name}', '{deleteMe.AccountNumber}', {deleteMe.CustomerId})";
+                                            OUTPUT INSERTED.Id
+                                            VALUES ('{deleteMe.Name}', '{deleteMe.AccountNumber}', {deleteMe.CustomerId})";
+
 
 
                     int newId = (int)cmd.ExecuteScalar();
@@ -89,9 +128,9 @@ namespace TestBangazonAPI
 
                     deleteMeTest = deleteMe;
                 }
-            
+
                 using (SqlCommand cmd = conn.CreateCommand())
-                { 
+                {
                     cmd.CommandText = @$"INSERT INTO Customer (FirstName, LastName, CreationDate, LastActiveDate)
                                         OUTPUT INSERTED.Id
                                         VALUES ('{newCustomer.FirstName}', '{newCustomer.LastName}', '{newCustomer.AccountCreated}', '{newCustomer.LastActive}')";
@@ -129,6 +168,12 @@ namespace TestBangazonAPI
                 conn.Open();
                 using (SqlCommand cmd = conn.CreateCommand())
                 {
+                    cmd.CommandText = @$"DELETE FROM Product WHERE Title='Test Product'";
+                    cmd.ExecuteNonQuery();
+                }
+
+                using (SqlCommand cmd = conn.CreateCommand())
+                {
                     cmd.CommandText = @$"DELETE FROM PaymentType WHERE [Name] = 'Test Payment'";
                     cmd.ExecuteNonQuery();
 
@@ -139,7 +184,7 @@ namespace TestBangazonAPI
                     cmd.ExecuteNonQuery();
                 }
 
-                using (SqlCommand cmd = conn.CreateCommand())                
+                using (SqlCommand cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = @$"DELETE FROM ProductType WHERE [Name] LIKE '%Wonder Woman%'";
                     cmd.ExecuteNonQuery();
@@ -158,7 +203,5 @@ namespace TestBangazonAPI
                 }
             }
         }
-
     }
 }
-

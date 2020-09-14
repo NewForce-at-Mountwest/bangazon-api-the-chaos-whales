@@ -43,7 +43,7 @@ namespace BangazonAPI.Controllers
                 {
                     string query = "SELECT Id AS OrderID, CustomerId AS BuyerID, [Order].PaymentTypeId FROM [Order] ";
 
-                    if(completed == "false")
+                    if (completed == "false")
                     {
                         query += "WHERE [Order].PaymentTypeId IS NULL";
                     }
@@ -53,12 +53,12 @@ namespace BangazonAPI.Controllers
                         query += "WHERE [Order].PaymentTypeId IS NOT NULL";
                     }
 
-                    if(_include == "products")
+                    if (_include == "products")
                     {
                         query = "SELECT [Order].Id AS OrderID, [Order].CustomerId AS BuyerID, [Order].PaymentTypeId, OrderProduct.ProductId, Product.Id AS ProductID, Product.ProductTypeId, Product.CustomerID AS SellerID, Product.Price, Product.Title, Product.Description, Product.Quantity FROM [Order] LEFT JOIN OrderProduct ON [Order].Id = OrderProduct.OrderId LEFT JOIN Product ON OrderProduct.ProductId = Product.Id ";
                     }
 
-                    if(_include == "customer")
+                    if (_include == "customer")
                     {
                         query = "SELECT [Order].Id AS OrderID, [Order].CustomerId AS BuyerID, [Order].PaymentTypeId, Customer.Id AS CustomerID, Customer.FirstName, Customer.LastName, Customer.CreationDate, Customer.LastActiveDate FROM [Order] LEFT JOIN Customer ON [Order].CustomerId = Customer.Id ";
                     }
@@ -80,7 +80,7 @@ namespace BangazonAPI.Controllers
                             order.PaymentTypeId = reader.GetInt32(reader.GetOrdinal("PaymentTypeId"));
                         }
 
-                        if(_include == "customer")
+                        if (_include == "customer")
                         {
                             order.customer = new Customers
                             {
@@ -94,7 +94,7 @@ namespace BangazonAPI.Controllers
 
                         if (orders.Any(o => o.Id == order.Id) == false)
                         {
-                            if(_include == "products")
+                            if (_include == "products")
                             {
                                 if (!reader.IsDBNull(reader.GetOrdinal("ProductID")))
                                 {
@@ -133,12 +133,12 @@ namespace BangazonAPI.Controllers
                                         Description = reader.GetString(reader.GetOrdinal("Description")),
                                     };
 
-                                    orders.FirstOrDefault(o=> o.Id == order.Id).listOfProducts.Add(product);
+                                    orders.FirstOrDefault(o => o.Id == order.Id).listOfProducts.Add(product);
                                 }
                             }
                         }
 
-                        
+
                     }
                     reader.Close();
 
